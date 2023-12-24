@@ -3,23 +3,26 @@ package com.CDTsport.CDTsport.service;
 
 import com.CDTsport.CDTsport.dto.ChangePassword;
 import com.CDTsport.CDTsport.dto.RegisterUserDTO;
+import com.CDTsport.CDTsport.entity.EmailOTP;
 import com.CDTsport.CDTsport.entity.Role;
 import com.CDTsport.CDTsport.entity.User;
 import com.CDTsport.CDTsport.exception.BaseException;
+import com.CDTsport.CDTsport.repository.EmailOTPRepository;
 import com.CDTsport.CDTsport.repository.RoleRepository;
 import com.CDTsport.CDTsport.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +31,8 @@ import java.util.Set;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
+    private final JavaMailSender javaMailSender;
+    private final EmailOTPRepository emailOTPRepository;
     private final PasswordEncoder passwordEncoder;
 
     public User saveUser(RegisterUserDTO registerUserDTO){
@@ -42,6 +46,23 @@ public class UserService {
         user.setFull_name(registerUserDTO.getFull_name());
         user.setEmail(registerUserDTO.getEmail());
         return userRepository.save(user);
+    }
+    public EmailOTP sendOTP(EmailOTP emailOTP){
+        Random random = new Random();
+        int otpNumber = 100000 + random.nextInt(900000);
+        String otp = String.valueOf(otpNumber);
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom("caotuyen1999vp1@gmail.com");
+        simpleMailMessage.setTo(emailOTP.getToEmail());
+        simpleMailMessage.setSubject("CDTsport send your OTP");
+        simpleMailMessage.setText("Your OTP code is:" + otp);
+        Timestamp timestamp = new Timestamp(new Date().getTime());
+        javaMailSender.send(simpleMailMessage);
+        emailOTP.setOtp(otp);
+        emailOTP.setTimeSendOtp(timestamp);
+        emailOTP.setStatusCheck(false);
+        emailOTPRepository.save(emailOTP);
+        return emailOTP;
     }
 
     public Role saveRole(Role role){

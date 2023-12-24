@@ -4,6 +4,7 @@ import com.CDTsport.CDTsport.auth.AuthenticationRequest;
 import com.CDTsport.CDTsport.auth.AuthenticationResponse;
 import com.CDTsport.CDTsport.dto.ChangePassword;
 import com.CDTsport.CDTsport.dto.RegisterUserDTO;
+import com.CDTsport.CDTsport.entity.EmailOTP;
 import com.CDTsport.CDTsport.entity.User;
 import com.CDTsport.CDTsport.entity.Role;
 import com.CDTsport.CDTsport.repository.UserRepository;
@@ -47,6 +48,10 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody RegisterUserDTO registerUserDTO){
         return ResponseEntity.ok(userService.saveUser(registerUserDTO));
+    }
+    @PostMapping("/send-otp")
+    public ResponseEntity<EmailOTP> sendOTP(@RequestBody EmailOTP emailOTP){
+        return ResponseEntity.ok(userService.sendOTP(emailOTP));
     }
 
     @PutMapping("/change-password")
