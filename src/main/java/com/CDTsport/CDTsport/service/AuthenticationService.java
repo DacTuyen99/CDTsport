@@ -5,6 +5,7 @@ import com.CDTsport.CDTsport.auth.AuthenticationRequest;
 import com.CDTsport.CDTsport.auth.AuthenticationResponse;
 import com.CDTsport.CDTsport.entity.Role;
 import com.CDTsport.CDTsport.entity.User;
+import com.CDTsport.CDTsport.repository.EmailOTPRepository;
 import com.CDTsport.CDTsport.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

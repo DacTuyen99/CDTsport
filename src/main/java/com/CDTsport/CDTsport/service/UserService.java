@@ -2,6 +2,7 @@ package com.CDTsport.CDTsport.service;
 
 
 import com.CDTsport.CDTsport.dto.ChangePassword;
+import com.CDTsport.CDTsport.dto.CheckOtpDTO;
 import com.CDTsport.CDTsport.dto.RegisterUserDTO;
 import com.CDTsport.CDTsport.entity.EmailOTP;
 import com.CDTsport.CDTsport.entity.Role;
@@ -22,6 +23,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -47,6 +49,34 @@ public class UserService {
         user.setEmail(registerUserDTO.getEmail());
         return userRepository.save(user);
     }
+    public String checkOtp(CheckOtpDTO checkOtpDTO){
+        Optional<EmailOTP> emailOTPOptional = emailOTPRepository.findEmailOTPByToEmail(checkOtpDTO.getEmail());
+        if (emailOTPOptional.isPresent()){
+            LocalDateTime dueDateOtp = emailOTPOptional.get().getTimeSendOtp().toLocalDateTime().plusSeconds(60);
+            if (dueDateOtp.isBefore(LocalDateTime.now()) && emailOTPOptional.get().getStatusCheck().equals(false)){
+                return "OVER TIME CHECK OTP - RESEND OTP";
+            }
+            if (!emailOTPOptional.get().getOtp().equals(checkOtpDTO.getOtp())){
+                if (emailOTPOptional.get().getCountCheck() < 5){
+                    emailOTPOptional.get().setCountCheck(emailOTPOptional.get().getCountCheck()+1);
+                    emailOTPRepository.save(emailOTPOptional.get());
+                    return "CHECK OTP FAILS";
+                }else {
+                    return "CHECK OTP FAILS MORE THAN 5 TIMES - RESEND OTP";
+                    }
+            }
+            if (emailOTPOptional.get().getOtp().equals(checkOtpDTO.getOtp())){
+                if (emailOTPOptional.get().getCountCheck() < 5){
+                    emailOTPOptional.get().setStatusCheck(true);
+                    emailOTPRepository.save(emailOTPOptional.get());
+                    return "CHECK OTP SUCCESS";
+                }else {
+                    return "CHECK OTP FAILS MORE THAN 5 TIMES - RESEND OTP";
+                }
+            }
+        }
+        return "CHECK OTP FAILS";
+    }
     public EmailOTP sendOTP(EmailOTP emailOTP){
         Random random = new Random();
         int otpNumber = 100000 + random.nextInt(900000);
@@ -61,6 +91,7 @@ public class UserService {
         emailOTP.setOtp(otp);
         emailOTP.setTimeSendOtp(timestamp);
         emailOTP.setStatusCheck(false);
+        emailOTP.setCountCheck(0);
         emailOTPRepository.save(emailOTP);
         return emailOTP;
     }

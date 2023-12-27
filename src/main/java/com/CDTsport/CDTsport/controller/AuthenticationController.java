@@ -3,6 +3,7 @@ package com.CDTsport.CDTsport.controller;
 import com.CDTsport.CDTsport.auth.AuthenticationRequest;
 import com.CDTsport.CDTsport.auth.AuthenticationResponse;
 import com.CDTsport.CDTsport.dto.ChangePassword;
+import com.CDTsport.CDTsport.dto.CheckOtpDTO;
 import com.CDTsport.CDTsport.dto.RegisterUserDTO;
 import com.CDTsport.CDTsport.entity.EmailOTP;
 import com.CDTsport.CDTsport.entity.User;
@@ -53,7 +54,10 @@ public class AuthenticationController {
     public ResponseEntity<EmailOTP> sendOTP(@RequestBody EmailOTP emailOTP){
         return ResponseEntity.ok(userService.sendOTP(emailOTP));
     }
-
+    @PostMapping("/check-otp")
+    public ResponseEntity<String> checkOTP(@RequestBody CheckOtpDTO checkOtpDTO){
+        return ResponseEntity.ok(userService.checkOtp(checkOtpDTO));
+    }
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePassword changePassword, Authentication authentication){
         userService.changePassword(changePassword,authentication);
