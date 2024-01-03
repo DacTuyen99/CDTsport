@@ -47,7 +47,13 @@ public class UserService {
         user.setUser_name(registerUserDTO.getUser_name());
         user.setFull_name(registerUserDTO.getFull_name());
         user.setEmail(registerUserDTO.getEmail());
-        return userRepository.save(user);
+        Optional<EmailOTP> emailOTPOptional = emailOTPRepository.findEmailOTPByToEmail(registerUserDTO.getEmail());
+        if (emailOTPOptional.isPresent()){
+            if (emailOTPOptional.get().getStatusCheck()){
+                userRepository.save(user);
+            }
+        }
+        return user;
     }
     public String checkOtp(CheckOtpDTO checkOtpDTO){
         Optional<EmailOTP> emailOTPOptional = emailOTPRepository.findEmailOTPByToEmail(checkOtpDTO.getEmail());
