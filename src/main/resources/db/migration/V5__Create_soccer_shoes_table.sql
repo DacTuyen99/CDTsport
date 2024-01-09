@@ -6,6 +6,6 @@ CREATE TABLE soccer_shoes(
     price                 INTEGER   NOT NULL,
     sale                  INTEGER   NOT NULL,
     price_sale            INTEGER   NOT NULL,
-    image_id              INTEGER[] NULL,
+    image_id              varchar NULL,
     CONSTRAINT soccer_shoes_pkey PRIMARY KEY (id)
 );

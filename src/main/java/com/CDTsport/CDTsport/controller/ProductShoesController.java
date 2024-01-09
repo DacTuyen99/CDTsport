@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/post-product")
 public class ProductShoesController {
     private final ProductShoesService productShoesService;
-    @PostMapping("/shoes")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/shoes")
     public ResponseEntity<SoccerShoes> postProductShoes(@RequestBody SoccerShoes soccerShoes){
         return ResponseEntity.ok(productShoesService.saveSoccerShoes(soccerShoes));
     }
+
 }

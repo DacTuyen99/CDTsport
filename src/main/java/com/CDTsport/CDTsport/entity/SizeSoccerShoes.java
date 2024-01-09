@@ -26,10 +26,4 @@ public class SizeSoccerShoes {
     private Long id;
     private Integer sizeShoes;
     private Integer quantity;
-    private Integer shoesId;
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shoesId",insertable = false,updatable = false)
-    private SoccerShoes soccerShoes;
-
 }

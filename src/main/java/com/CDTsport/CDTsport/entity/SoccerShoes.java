@@ -29,10 +29,9 @@ public class SoccerShoes {
     private Integer price;
     private Integer sale;
     private Integer priceSale;
-    @Type(type = "com.CDTsport.CDTsport.entity.IntArrayUserType")
-    private Integer[] imgId;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shoesId",insertable = false,updatable = false)
+    private String imageId;
+    @OneToMany(cascade = CascadeType.ALL,targetEntity = SizeSoccerShoes.class)
+    @JoinColumn(name = "shoes_id",referencedColumnName = "id")
     private List<SizeSoccerShoes> sizeSoccerShoes;
 
 }
