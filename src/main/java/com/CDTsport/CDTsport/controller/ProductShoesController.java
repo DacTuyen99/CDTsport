@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/product")
@@ -27,5 +29,9 @@ public class ProductShoesController {
                                                              @RequestParam(required = false) int page,
                                                              @RequestParam(required = false) int size){
         return ResponseEntity.ok(productShoesService.getSearchSoccerShoes(description,page,size));
+    }
+    @GetMapping ("/shoes/brand")
+    public ResponseEntity<SoccerShoesPageDTO> getShoesById(@RequestParam String brand,@RequestParam int page){
+        return ResponseEntity.ok(productShoesService.findByBrand(brand,page));
     }
 }

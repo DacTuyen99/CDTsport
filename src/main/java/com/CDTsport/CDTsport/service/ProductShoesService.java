@@ -10,6 +10,7 @@ import com.CDTsport.CDTsport.service.specification.SoccerShoesSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,16 @@ public class ProductShoesService {
                 .list(soccerShoesPageDTOPage.toList())
                 .total(soccerShoesPageDTOPage.getTotalElements())
                 .totalPage(soccerShoesPageDTOPage.getTotalPages())
+                .build();
+    }
+    public SoccerShoesPageDTO findByBrand(String brand,int page){
+        Pageable pageable = PageRequest.of(page-1,10,Sort.by(Sort.Direction.DESC,"timePost"));
+        Page<SoccerShoes> listShoes = soccerShoesRepository.findAllByBrand(brand,pageable);
+        return SoccerShoesPageDTO.builder()
+                .totalPage(listShoes.getTotalPages())
+                .total(listShoes.getTotalElements())
+                .currentPage(page)
+                .list(listShoes.getContent())
                 .build();
     }
 }
