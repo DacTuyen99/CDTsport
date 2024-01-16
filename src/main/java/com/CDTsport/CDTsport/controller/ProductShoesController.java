@@ -31,7 +31,9 @@ public class ProductShoesController {
         return ResponseEntity.ok(productShoesService.getSearchSoccerShoes(description,page,size));
     }
     @GetMapping ("/shoes/brand")
-    public ResponseEntity<SoccerShoesPageDTO> getShoesById(@RequestParam String brand,@RequestParam int page){
-        return ResponseEntity.ok(productShoesService.findByBrand(brand,page));
+    public ResponseEntity<SoccerShoesPageDTO> getShoesById(@RequestParam String brand,@RequestParam int page,
+                                                           @RequestParam(required = false) Integer pr1,
+                                                           @RequestParam(required = false) Integer pr2){
+        return ResponseEntity.ok(productShoesService.findByBrand(brand,pr1,pr2,page));
     }
 }

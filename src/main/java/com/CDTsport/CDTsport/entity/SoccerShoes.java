@@ -30,6 +30,8 @@ public class SoccerShoes {
     private Integer sale;
     private Integer priceSale;
     private String imageId;
+//    @Column(columnDefinition = "integer[]")
+//    private Integer[] listSize;
     @OneToMany(cascade = CascadeType.ALL,targetEntity = SizeSoccerShoes.class)
     @JoinColumn(name = "shoes_id",referencedColumnName = "id")
     private List<SizeSoccerShoes> sizeSoccerShoes;

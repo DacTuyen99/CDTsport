@@ -1,0 +1,1 @@
+ALTER TABLE soccer_shoes ADD COLUMN list_size INTEGER[] null;
